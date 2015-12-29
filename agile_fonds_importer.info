@@ -1,0 +1,7 @@
+name = Agile Humanities Fonds Importer
+description = Custom module to import prepared fonds into Modernist Commons
+core = 7.x
+dependencies[] = islandora
+dependencies[] = islandora_large_image
+package = Agile Humanities
+version = 7.x-1.0

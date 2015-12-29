@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * @file
+ * Miscellaneous hook implementations.
+ */
+
+define('HAS_FONDS_INDENTIFIER', 'hasFondIdentifier');
+define('HAS_VOLUME_INDENTIFIER', 'hasVolumeIdentifier');
+define('HAS_FOLDER_INDENTIFIER', 'hasFolderIdentifier');
+define('HAS_FILE_INDENTIFIER', 'hasFileIdentifier');
+
+/**
+ * Implements hook_menu().
+ */
+function agile_fonds_importer_menu() {
+  $items = array();
+  $items['agile/migrate/csv'] = array(
+    'title' => 'Import CSV',
+    'description' => 'Imports Fonds metadata',
+    'type' => MENU_NORMAL_ITEM,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('agile_import_csv_form'),
+    'file' => 'includes/agile_migration.inc',
+    'access arguments' => array('access content'),
+  );
+  $items['agile/migrate/volume'] = array(
+    'title' => 'Migrate Volume',
+    'description' => 'Migrates entire volume from known fond',
+    'type' => MENU_NORMAL_ITEM,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('agile_migrate_volume_form'),
+    'file' => 'includes/agile_migration.inc',
+    'access arguments' => array('access content'),
+  );
+  return $items;
+}

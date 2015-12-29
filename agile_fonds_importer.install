@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * @file
+ * Install hooks for this module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+  function agile_fonds_importer_schema() {
+  $schema = array();
+  $schema['agile_fonds_metadata'] = array(
+    'description' => 'Records metadata migrated from CSV.',
+    'fields' => array(
+      'wo_number' => array(
+        'description' => 'W.O. Number from spreadsheet',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+    'item_number' => array(
+        'description' => 'Item number from spreadsheet.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => 'Undefined',
+      ),
+
+    'copy_negative_number' => array(
+        'description' => 'Copy Negative Number number from spreadsheet.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+    'c140' => array(
+        'description' => 'Barcode from spreadsheet.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,    
+      ),
+     'title' => array(
+        'description' => 'title from spreadsheet.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+       'copy_negative_number' => array(
+        'description' => 'Copy Negative Number number from spreadsheet.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+     'special_notes' => array(
+        'description' => 'Copy Negative Number number from spreadsheet.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+     'pid' => array(
+        'description' => 'PID od object created from this record.',
+        'default' => 'uningested',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+    ),
+    'primary key' => array('copy_negative_number'),
+
+  );
+  return $schema;
+}

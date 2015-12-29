@@ -1,0 +1,118 @@
+    
+<?xml version="1.0"?>
+<!DOCTYPE EAD PUBLIC "+//ISBN 1-931666-00-8//DTD ead.dtd (Encoded Archival Description (EAD)
+Version 2002)//EN" [
+<!ENTITY hdr-cu-i-spcoll PUBLIC "-//University of California, Irvine::Library::Special
+Collections and Archives//TEXT (eadheader: name and address)//EN" "hdrcuisp.sgm">
+<!ENTITY tp-cu-i-spcoll PUBLIC "-//University of California, Irvine::Library::Special Collections
+and Archives//TEXT (titlepage: name and address)//EN" "tpcuisp.sgm">
+<!ENTITY ucseal PUBLIC "-//University of California, Berkeley::Library//NONSGML (University of
+California seal)//EN" NDATA GIF>
+]>
+<ead>
+    <archdesc>
+
+        <dsc>
+            <c01 level="file">
+                <did>
+                    <container type="box-folder" label="Box ">1 : 6-11</container>
+                    <unittitle>Photographs</unittitle>
+                </did>
+                <c02 level="file">
+                    <did>
+                        <container type="box-folder" label="Box ">1 : 6-7</container>
+                        <unittitle>Personal</unittitle>
+                    </did>
+                    <c03 level="item">
+                        <did>
+                            <container type="box-folder" label="Box ">FB-21 : 1</container>
+                            <unittitle>Prince School class, photographic print</unittitle>
+                            <unitdate normal="1914">1914</unitdate>
+                        </did>
+                    </c03>
+                    <c03 level="file">
+                        <did>
+                            <container type="box-folder" label="Box ">1 : 6</container>
+                            <unittitle>Teenage performances, undated.</unittitle>
+                            <physdesc>
+                                <extent>5 items.</extent>
+                            </physdesc>
+                        </did>
+                    </c03>
+                    <c03 level="file">
+                        <did>
+                            <container type="box-folder" label="Box ">1 : 7</container>
+                            <unittitle>Portraits, undated.</unittitle>
+                            <physdesc>
+                                <extent>3 items.</extent>
+                            </physdesc>
+                        </did>
+                    </c03>
+                </c02>
+                <c02 level="file">
+                    <did>
+                        <container type="box-folder" label="Box ">1 : 8-10</container>
+                        <unittitle>Performances by students</unittitle>
+                    </did>
+                    <c03 level="item">
+                        <did>
+                            <container type="box-folder" label="Box ">1 : 8</container>
+                            <unittitle>Piggilly wiggily</unittitle>
+                            <unitdate normal="1942">ca. 1942</unitdate>
+                        </did>
+                    </c03>
+                    <c03 level="item">
+                        <did>
+                            <container type="box-folder" label="Box ">1 : 8</container>
+                            <unittitle>Top hat</unittitle>
+                            <unitdate normal="1942">ca. 1942</unitdate>
+                        </did>
+                    </c03>
+                    <c03 level="file">
+                        <did>
+                            <container type="box-folder" label="Box ">1 : 8-10</container>
+                            <unittitle>Unidentified, undated.</unittitle>
+                            <physdesc>
+                                <extent>15 items.</extent>
+                            </physdesc>
+                        </did>
+                    </c03>
+                </c02>
+                <c02 level="file">
+                    <did>
+                        <container type="box-folder" label="Box ">1 : 11</container>
+                        <unittitle>Other individuals</unittitle>
+                    </did>
+                    <c03 level="file">
+                        <did>
+                            <container type="box-folder" label="Box ">1 : 11</container>
+                            <unittitle>Hall, Tom</unittitle>
+                            <unitdate normal="1930">1930</unitdate>
+                        </did>
+                    </c03>
+                    <c03 level="file">
+                        <did>
+                            <container type="box-folder" label="Box ">1 : 11</container>
+                            <unittitle>Purcell, Barbara</unittitle>
+                            <unitdate normal="1942">ca. 1942</unitdate>
+                        </did>
+                    </c03>
+                    <c03 level="file">
+                        <did>
+                            <container type="box-folder" label="Box ">1 : 11</container>
+                            <unittitle>Stokes, Bernice</unittitle>
+                            <unitdate normal="1942">ca. 1942</unitdate>
+                        </did>
+                    </c03>
+                    <c03 level="file">
+                        <did>
+                            <container type="box-folder" label="Box ">1 : 11</container>
+                            <unittitle>Roberts, Francine</unittitle>
+                            <unitdate normal="1942">ca. 1942</unitdate>
+                        </did>
+                    </c03>
+                </c02>
+            </c01>
+        </dsc>
+    </archdesc>
+</ead>
