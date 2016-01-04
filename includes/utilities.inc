@@ -45,6 +45,9 @@ function agile_fonds_parse_file($filename) {
  *   Parsed values.
  */
 function agile_fonds_parse_item($item) {
+  if(!$item) {
+    return FALSE;
+  }
   $last = strrpos($item, " ");
   $fonds = substr($item, 0, $last);
   $local = substr($item, $last + 1);

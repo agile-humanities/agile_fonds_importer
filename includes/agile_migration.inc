@@ -23,6 +23,10 @@ function agile_migrate_volume_form($form, &$form_state) {
     '#title' => t("Volume Directory"),
     '#description' => t('Full path to volume directory'),
   );
+  $form['author'] = array(
+    '#type' => 'textfield',
+    '#title' => t("Author"),
+  );
   $form['namespace'] = array(
     '#type' => 'textfield',
     '#title' => t("Namespace"),
@@ -84,6 +88,7 @@ function agile_migrate_volume_form_submit($form, &$form_state) {
         'file' => $tiff,
         'namespace' => $form_state['values']['namespace'],
         'collection_pid' => $form_state['values']['collection'],
+        'author' => $form_state['values']['author']
       ),
     );
   }
@@ -150,6 +155,7 @@ function agile_import_csv_form_submit($form, &$form_state) {
   foreach ($files as $csv_path) {
     agile_add_csv_to_database($csv_path);
   }
+  drupal_set_message(t("files added to database"));
 }
 
 /**
@@ -166,31 +172,44 @@ function agile_import_csv_form_submit($form, &$form_state) {
  * @param string $source_path
  *   File Path
  */
-function agile_batch_add_file($file, $namespace, $collection_pid) {
+function agile_batch_add_file($file, $namespace, $collection_pid, $author) {
   module_load_include('inc', 'agile_fonds_importer', 'includes/db');
   module_load_include('inc', 'agile_fonds_importer', 'includes/utilities');
+  module_load_include('inc', 'agile_fonds_importer', 'includes/mods_builder');
+
   global $user;
   $path_info = pathinfo($file);
   $tuque = new IslandoraTuque();
   $stored_values = agile_read_metadata($path_info['filename'], "copy_negative_number");
   $provenence = agile_fonds_parse_item($stored_values['item_number']);
-  $label = $path_info['filename'];
-  $label = isset($stored_values['title']) ? $stored_values['title'] : $path_info['filename'];
-  $object = $tuque->repository->constructObject($namespace);
-  $object->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOf', $collection_pid);
-  $object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:sp_large_image_cmodel');
-  $object->relationships->add(ISLANDORA_RELS_EXT_URI, HAS_FONDS_INDENTIFIER, $provenence['fonds'], RELS_TYPE_PLAIN_LITERAL);
-  $object->relationships->add(ISLANDORA_RELS_EXT_URI, HAS_VOLUME_INDENTIFIER, $provenence['volume'], RELS_TYPE_PLAIN_LITERAL);
-  $object->relationships->add(ISLANDORA_RELS_EXT_URI, HAS_FOLDER_INDENTIFIER, $provenence['folder'], RELS_TYPE_PLAIN_LITERAL);
-  $object->relationships->add(ISLANDORA_RELS_EXT_URI, HAS_FILE_INDENTIFIER, $provenence['file'], RELS_TYPE_PLAIN_LITERAL);
-  $object->label = $metadata['title'];
-  $object->owner = $user->name;
-  // Add OBJ datasatream.
-  $ds = $object->constructDatastream('OBJ', 'M');
-  $ds->setContentFromFile($file, FALSE);
-  $ds->label = 'OBJ';
-  $ds->mimetype = "image/tiff";
-  $object->ingestDatastream($ds);
-  islandora_add_object($object);
-  agile_update_with_pid($object->id, $stored_values['copy_negative_number']);
+  if ($provenance === FALSE) {
+    drupal_set_messsage($path_info['filename'] . t(" has no associated database record"));
+    return;
+  }
+  if ($stored_values['pid'] == 'uningested') {
+    $label = isset($stored_values['title']) ? $stored_values['title'] : $path_info['filename'];
+    $object = $tuque->repository->constructObject($namespace);
+    $object->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOf', $collection_pid);
+    $object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:sp_large_image_cmodel');
+    $object->relationships->add(ISLANDORA_RELS_EXT_URI, HAS_FONDS_INDENTIFIER, $provenence['fonds'], RELS_TYPE_PLAIN_LITERAL);
+    $object->relationships->add(ISLANDORA_RELS_EXT_URI, HAS_VOLUME_INDENTIFIER, $provenence['volume'], RELS_TYPE_PLAIN_LITERAL);
+    $object->relationships->add(ISLANDORA_RELS_EXT_URI, HAS_FOLDER_INDENTIFIER, $provenence['folder'], RELS_TYPE_PLAIN_LITERAL);
+    $object->relationships->add(ISLANDORA_RELS_EXT_URI, HAS_FILE_INDENTIFIER, $provenence['file'], RELS_TYPE_PLAIN_LITERAL);
+    $object->label = $label;
+    $object->owner = $user->name;
+    // Add OBJ datasatream.
+    $ds = $object->constructDatastream('OBJ', 'M');
+    $ds->setContentFromFile($file, FALSE);
+    $ds->label = 'OBJ';
+    $ds->mimetype = "image/tiff";
+    $object->ingestDatastream($ds);
+    // Add MODS datastream
+    $builder = new agile_mods_builder();
+    $builder->set_title($label);
+    $builder->set_author($author);
+    $builder->set_identifier($stored_values['item_number'], 'item number');
+    $builder->add_as_datastream($object);
+    islandora_add_object($object);
+    agile_update_with_pid($object->id, $stored_values['copy_negative_number']);
+  }
 }

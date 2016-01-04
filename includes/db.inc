@@ -31,7 +31,7 @@ function agile_add_metadata($result) {
  *   associative array of  values from the database
  */
 function agile_read_metadata($value, $field = 'copy_negative_number') {
-  $result = db_query("SELECT * from {agile_fonds_metadata} WHERE $field = :$field", array(":$field" => $value));
+  $result = db_query("SELECT * from {agile_fonds_metadata} WHERE $field = :value", array(":value" => $value));
   return $result->fetchAssoc();
 }
 
@@ -44,10 +44,10 @@ function agile_read_metadata($value, $field = 'copy_negative_number') {
  *   Copy negative number for  CSV
  */
 function agile_update_with_pid($pid, $cnn) {
- db_update('agile_fonds_metadata')
-    ->fields(array('pid' => $pid))
-    ->condition('copy_negative_number', $cnn)
-    ->execute();
+  db_update('agile_fonds_metadata')
+      ->fields(array('pid' => $pid))
+      ->condition('copy_negative_number', $cnn)
+      ->execute();
 }
 
 /**
@@ -62,4 +62,31 @@ function agile_update_with_pid($pid, $cnn) {
 function agile_check_ingest($pid) {
   $result = db_query("SELECT * from {agile_fonds_metadata} WHERE pid = :pid", array(":pid" => $pid));
   return $result->fetchAssoc();
+}
+
+/**
+ * Returns ingestion status from record identified by cnn
+ *
+ * @param string $cnn
+ *  Copy Negative Number
+ *
+ * @return array
+ *   associative array of  values from the database
+ */
+function agile_check_uningested($cnn) {
+  $result = db_query("SELECT pid from {agile_fonds_metadata} WHERE copy_negative_number = :cnn", array(":cnn" => $cnn));
+  $pid = $result->fetchfield(0);
+  switch ($pid) {
+    case FALSE :
+      $status = "missing";
+      break;
+
+    case 'uningested' :
+      $status = 'uningested';
+      break;
+
+    default:
+      $status = 'ingested';
+  }
+  return $status;
 }
