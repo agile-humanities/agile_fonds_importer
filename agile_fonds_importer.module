@@ -4,7 +4,6 @@
  * @file
  * Miscellaneous hook implementations.
  */
-
 define('HAS_FONDS_INDENTIFIER', 'hasFondIdentifier');
 define('HAS_VOLUME_INDENTIFIER', 'hasVolumeIdentifier');
 define('HAS_FOLDER_INDENTIFIER', 'hasFolderIdentifier');
@@ -34,4 +33,44 @@ function agile_fonds_importer_menu() {
     'access arguments' => array('access content'),
   );
   return $items;
+}
+
+/**
+ * Implements hook_preprocess_theme().
+ */
+function agile_fonds_importer_process_islandora_large_image(&$variables) {
+  $pid = $variables['islandora_object']->id;
+  $object = islandora_object_load($pid);
+  $relationships = $object->relationships->get();
+  $provenance = array();
+  foreach ($relationships AS $relationship) {
+    switch ($relationship['predicate']['value']) {
+      case HAS_FONDS_INDENTIFIER:
+        $fond = t('Fond');
+        $provenance[$fond] = $relationship['object']['value'];
+        break;
+
+      case HAS_VOLUME_INDENTIFIER:
+        $volume = t('Volume');
+        $provenance[$volume] = $relationship['object']['value'];
+        break;
+
+      case HAS_FOLDER_INDENTIFIER:
+        $folder = t('Folder');
+        $provenance[$folder] = $relationship['object']['value'];
+        break;
+
+      case HAS_FILE_INDENTIFIER:
+        $file = t('File');
+        $provenance[$file] = $relationship['object']['value'];
+        break;
+    }
+  }
+  $identifier = '';
+  if ($provenance) {
+    foreach ($provenance as $key => $value) {
+      $identifier .= "$key : $value  ";
+    }
+  }
+  $variables['islandora_content'] = $identifier . $variables['islandora_content'];
 }
