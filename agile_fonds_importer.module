@@ -47,30 +47,27 @@ function agile_fonds_importer_process_islandora_large_image(&$variables) {
     switch ($relationship['predicate']['value']) {
       case HAS_FONDS_INDENTIFIER:
         $fond = t('Fond');
-        $provenance[$fond] = $relationship['object']['value'];
+        $provenance[] = "$fond : " . $relationship['object']['value'];
         break;
 
       case HAS_VOLUME_INDENTIFIER:
         $volume = t('Volume');
-        $provenance[$volume] = $relationship['object']['value'];
+        $provenance[] = "$volume : " . $relationship['object']['value'];
         break;
 
       case HAS_FOLDER_INDENTIFIER:
         $folder = t('Folder');
-        $provenance[$folder] = $relationship['object']['value'];
+        $provenance[] = "$folder : " . $relationship['object']['value'];
         break;
 
       case HAS_FILE_INDENTIFIER:
         $file = t('File');
-        $provenance[$file] = $relationship['object']['value'];
+        $provenance[] = "$file : " . $relationship['object']['value'];
+        break;
         break;
     }
   }
-  $identifier = '';
-  if ($provenance) {
-    foreach ($provenance as $key => $value) {
-      $identifier .= "$key : $value  ";
-    }
-  }
+  $identifier = implode(" | ", $provenance);
+
   $variables['islandora_content'] = $identifier . $variables['islandora_content'];
 }
